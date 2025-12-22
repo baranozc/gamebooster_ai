@@ -1,0 +1,20 @@
+@model GameBooster.Web.Models.HomeIndexViewModel
+
+@if (User.Identity?.IsAuthenticated == true && Model.UserSystems.Count > 0)
+{
+    <div class="alert alert-primary p-3 mb-4 border-2 border-primary" style="background-color: rgba(13, 110, 253, 0.2); border-color: #0d6efd; color: #fff;">
+        <label class="form-label fw-bold" style="color: #6ea8fe;">📂 Kayıtlı Sistemini Hızlı Yükle:</label>
+        <select id="savedSystemSelect" class="form-select" onchange="loadSystem()">
+            <option value="">-- Manuel Seçim Yapacağım --</option>
+            @foreach (var sys in Model.UserSystems)
+            {
+                <option value="@sys.Id" 
+                        data-gpu="@sys.GPUId" 
+                        data-cpu="@sys.CPUId" 
+                        data-ram="@sys.RamAmount">
+                    @sys.SystemName (@sys.GPU.Name)
+                </option>
+            }
+        </select>
+    </div>
+}

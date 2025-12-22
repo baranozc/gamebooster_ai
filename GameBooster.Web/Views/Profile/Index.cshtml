@@ -1,0 +1,134 @@
+@model List<GameBooster.Core.Entities.UserSystem>
+
+@{
+    ViewData["Title"] = "Profilim";
+    var gpuList = ViewBag.Gpus as List<GameBooster.Core.Entities.GPU>;
+    var cpuList = ViewBag.Cpus as List<GameBooster.Core.Entities.CPU>;
+    var ramOptions = ViewBag.RamOptions as List<int>;
+}
+
+<div class="container mt-5 text-white">
+    
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success mt-4 bg-success text-white border-0 shadow-sm">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger mt-4 bg-danger text-white border-0 shadow-sm">
+            ⚠️ @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div class="card shadow-sm border-0 mb-5 bg-dark text-white" style="border: 1px solid #28a745 !important;">
+        <div class="card-header bg-success text-white">
+            <h5 class="m-0 py-1">➕ Yeni Sistem Oluştur</h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="AddSystem" method="post" class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Sistem Adı</label>
+                    <input type="text" name="systemName" class="form-control bg-secondary text-white border-0" placeholder="Örn: Oyun Canavarı" required>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Ekran Kartı</label>
+                    <select name="gpuId" class="form-select bg-secondary text-white border-0" required>
+                        <option value="">Seçiniz...</option>
+                        @foreach (var gpu in gpuList!)
+                        {
+                            <option value="@gpu.Id">@gpu.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">İşlemci</label>
+                    <select name="cpuId" class="form-select bg-secondary text-white border-0" required>
+                        <option value="">Seçiniz...</option>
+                        @foreach (var cpu in cpuList!)
+                        {
+                            <option value="@cpu.Id">@cpu.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">RAM</label>
+                    <select name="ramAmount" class="form-select bg-secondary text-white border-0" required>
+                        @foreach (var ram in ramOptions!)
+                        {
+                            <option value="@ram">@ram GB</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-success w-100 fw-bold">Ekle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <hr class="my-5 border-secondary">
+        <h2 class="mb-4 d-flex align-items-center">
+            <span class="me-2">👤</span> Kayıtlı Sistemlerim
+        </h2>
+
+        <div class="row">
+            @foreach (var sys in Model)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-lg h-100 bg-dark text-white border-0" style="border: 1px solid #007bff !important;">
+                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                            <span class="fw-bold">@sys.SystemName</span>
+                            <small class="text-white-50">@sys.CreatedDate.ToShortDateString()</small>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2"><span class="me-2">🎮</span><strong>GPU:</strong> @sys.GPU.Name</li>
+                                <li class="mb-2"><span class="me-2">🧠</span><strong>CPU:</strong> @sys.CPU.Name</li>
+                                <li class="mb-0"><span class="me-2">💾</span><strong>RAM:</strong> @sys.RamAmount GB</li>
+                            </ul>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 text-end pb-3">
+                            <form asp-action="DeleteSystem" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@sys.Id" />
+                                <button type="submit" class="btn btn-sm btn-outline-danger px-3"
+                                    onclick="return confirm('Bu sistemi silmek istediğinize emin misiniz?');">
+                                    🗑️ Sil
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info bg-dark text-info border-info text-center mt-4">
+            Henüz kayıtlı bir sisteminiz yok. Yukarıdaki formdan ekleyebilirsiniz.
+        </div>
+    }
+</div>
+
+<style>
+    /* Input odaklandığında parlamayı düzeltir */
+    .form-control:focus, .form-select:focus {
+        background-color: #495057 !important;
+        color: white !important;
+        box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+    }
+    /* Option renklerini düzeltir */
+    option {
+        background: #343a40;
+        color: white;
+    }
+</style>

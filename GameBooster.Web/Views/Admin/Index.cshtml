@@ -1,0 +1,38 @@
+@{
+    ViewData["Title"] = "Yönetici Paneli";
+}
+
+<div class="container mt-5">
+    <div class="p-5 mb-4 bg-dark text-white rounded-3 shadow">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">👑 Yönetici Paneli</h1>
+            <p class="col-md-8 fs-4">Sistem istatistiklerini görüntüleyebilir ve üyeleri yönetebilirsin.</p>
+            
+            <a asp-action="UserList" class="btn btn-primary btn-lg fw-bold shadow">
+                👥 Kullanıcı Ayarları / Listesi
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card border-warning mb-3 shadow-sm h-100">
+                <div class="card-header bg-warning text-dark fw-bold fs-5">👥 Toplam Üye</div>
+                <div class="card-body">
+                    <h2 class="card-title display-4 fw-bold">@ViewBag.UserCount</h2>
+                    <p class="card-text text-muted">Sisteme kayıtlı toplam kullanıcı.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card border-info mb-3 shadow-sm h-100">
+                <div class="card-header bg-info text-white fw-bold fs-5">🎮 Donanım Havuzu</div>
+                <div class="card-body">
+                    <h2 class="card-title display-4 fw-bold">@ViewBag.HardwareCount</h2>
+                    <p class="card-text text-muted">Veritabanındaki toplam GPU + CPU sayısı.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

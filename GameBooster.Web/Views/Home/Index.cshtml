@@ -1,0 +1,181 @@
+﻿@model GameBooster.Web.Models.HomeIndexViewModel
+
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<div class="text-center mb-5">
+    <h1 class="display-4 fw-bold text-primary">GameBooster AI</h1>
+    <p class="lead text-muted">Donanımını ve ayarlarını seç, yapay zeka FPS'ini tahmin etsin.</p>
+</div>
+
+<div class="container">
+    <div class="row">
+        
+        <div class="col-lg-8 mb-4">
+            
+            @if (TempData["FPS_Result"] != null)
+            {
+                var fpsValue = Convert.ToDouble(TempData["FPS_Result"]);
+                if (fpsValue == 0)
+                {
+                    <div class="alert alert-danger shadow-sm p-4 mb-4 text-center">
+                        <h2 class="m-0">⛔ OYUN AÇILMAZ!</h2>
+                        <p class="mb-0 mt-2">Sistem gereksinimleri yetersiz veya model hatası.</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-success shadow-sm p-4 mb-4 text-center">
+                        <h2 class="m-0">🚀 Tahmini Performans: <span class="fw-bold text-danger">@fpsValue FPS</span></h2>
+                    </div>
+                }
+            }
+
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-4">
+                    <h4 class="card-title mb-4">🖥️ Sistemini Oluştur</h4>
+                    
+                    <form method="post">
+                        
+                        <partial name="_UserSystemsPartial" model="Model" />
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Oyun</label>
+                            <select class="form-select form-select-lg" asp-for="SelectedGameId" 
+                                    asp-items="@(new SelectList(Model.GameList, "Id", "Name"))">
+                                <option value="">-- Bir Oyun Seç --</option>
+                            </select>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Ekran Kartı (GPU)</label>
+                                <select class="form-select" asp-for="SelectedGpuId" id="gpuSelect"
+                                        asp-items="@(new SelectList(Model.GpuList, "Id", "Name"))">
+                                    <option value="">-- GPU Seç --</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">İşlemci (CPU)</label>
+                                <select class="form-select" asp-for="SelectedCpuId" id="cpuSelect"
+                                        asp-items="@(new SelectList(Model.CpuList, "Id", "Name"))">
+                                    <option value="">-- CPU Seç --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row p-3 rounded mb-3" style="background-color: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);">
+                            
+                            <div class="col-12 mb-2">
+                                <small class="fw-bold" style="color: #00d2ff;">🎮 Oyun İçi Ayarlar:</small>
+                            </div>
+                            
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label fw-bold">Çözünürlük</label>
+                                <select class="form-select" asp-for="SelectedResolution">
+                                    <option value="720p">1280x720 (HD)</option>
+                                    <option value="1080p">1920x1080 (FHD)</option>
+                                    <option value="1440p">2560x1440 (2K)</option>
+                                    <option value="4K">3840x2160 (4K)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label fw-bold">Grafik Kalitesi</label>
+                                <select class="form-select" asp-for="SelectedPreset">
+                                    <option value="Low">Düşük (Low)</option>
+                                    <option value="Medium">Orta (Medium)</option>
+                                    <option value="High">Yüksek (High)</option>
+                                    <option value="Ultra">Ultra</option>
+                                </select>
+                            </div>
+
+                        </div> <div class="mb-4">
+                            <label class="form-label fw-bold">RAM Miktarı (GB)</label>
+                            <select class="form-select" asp-for="RamAmount" id="ramSelect"
+                                    asp-items="@(new SelectList(Model.RamOptions))">
+                                <option value="">-- RAM Seç --</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 btn-lg shadow fw-bold">
+                            🚀 HESAPLA
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div id="trend-app"></div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function loadSystem() {
+        var selectBox = document.getElementById("savedSystemSelect");
+        if (!selectBox) return; // Partial View yüklenmezse hata vermesin
+
+        var selectedOption = selectBox.options[selectBox.selectedIndex];
+        if (selectBox.value === "") return;
+
+        var gpuId = selectedOption.getAttribute("data-gpu");
+        var cpuId = selectedOption.getAttribute("data-cpu");
+        var ramVal = selectedOption.getAttribute("data-ram");
+
+        // Elementler varsa değerlerini doldur
+        if(document.getElementById("gpuSelect")) document.getElementById("gpuSelect").value = gpuId;
+        if(document.getElementById("cpuSelect")) document.getElementById("cpuSelect").value = cpuId;
+        if(document.getElementById("ramSelect")) document.getElementById("ramSelect").value = ramVal;
+    }
+</script>
+
+<script type="text/x-template" id="trend-template">
+    <div class="card shadow-sm border-warning sticky-top" style="top: 20px; z-index: 1;">
+        <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+            <h6 class="m-0 fw-bold">🔥 Haftanın Trendleri</h6>
+            <span class="badge bg-dark">Canlı</span>
+        </div>
+        <div class="card-body p-0">
+            <div v-if="trends.length === 0" class="text-center p-4">
+                <div class="spinner-border spinner-border-sm text-warning" role="status"></div>
+                <p class="mt-2 small text-muted">Veriler yükleniyor...</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li v-for="item in trends" :key="item.id" class="list-group-item d-flex justify-content-between align-items-center">
+                    <div style="line-height: 1.2;">
+                        <span class="d-block fw-bold" style="font-size: 0.9rem;">{{ item.name }}</span>
+                        <small class="text-muted" style="font-size: 0.75rem;">{{ item.status }}</small>
+                    </div>
+                    <span class="badge bg-light text-dark border">{{ item.searchCount }}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</script>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+    const { createApp } = Vue;
+
+    createApp({
+        template: '#trend-template',
+        data() { return { trends: [] } },
+        mounted() { this.fetchTrends(); },
+        methods: {
+            async fetchTrends() {
+                try {
+                    // Node.js API'den veri çek
+                    const response = await fetch('http://localhost:3001/api/trends');
+                    const data = await response.json();
+                    this.trends = data;
+                } catch (error) { 
+                    console.error("Trendler yüklenemedi:", error); 
+                }
+            }
+        }
+    }).mount('#trend-app');
+</script>

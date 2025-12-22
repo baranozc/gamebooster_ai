@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - GameBooster.Web</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/GameBooster.Web.styles.css" asp-append-version="true" />
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3" 
+             style="background-color: rgba(20, 20, 30, 0.95); border-color: rgba(255, 255, 255, 0.1) !important;">
+            
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index" 
+                   style="color: #00d2ff !important; text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);">
+                   GameBooster.Web
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
+                        </li>
+                    </ul>
+                    
+                    <ul class="navbar-nav ms-auto">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-warning fw-bold" asp-controller="Admin" asp-action="Index">
+                                        <i class="fas fa-crown"></i> Yönetim
+                                    </a>
+                                </li>
+                            }
+                            <li class="nav-item">
+                                <a class="nav-link text-info fw-bold" asp-controller="Profile" asp-action="Index">
+                                    👤 @User.Identity.Name
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link btn btn-outline-danger btn-sm ms-2 text-danger" asp-controller="Account" asp-action="Logout" style="border: 1px solid red;">
+                                    Çıkış Yap
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-controller="Account" asp-action="Register">Kayıt Ol</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link btn btn-primary btn-sm ms-2 text-dark fw-bold" asp-controller="Account" asp-action="Login" style="background-color: #00d2ff; border:none;">
+                                    Giriş Yap
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted" 
+            style="background-color: rgba(20, 20, 30, 0.95); border-color: rgba(255, 255, 255, 0.1) !important; color: #b0c4de;">
+        
+        <div class="container d-flex justify-content-between align-items-center py-2">
+            
+            <div>
+                &copy; 2025 - GameBooster AI - <span style="color: #00d2ff; font-weight: bold;">Yazılım Müh. Projesi</span>
+            </div>
+
+            <div class="position-relative text-light">
+                @await Component.InvokeAsync("ExchangeRate")
+            </div>
+
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

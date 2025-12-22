@@ -1,0 +1,123 @@
+/* --- GENEL SAYFA YAPISI (Karanlık Tema) --- */
+html, body {
+  height: 100%;
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: #e0e0e0; /* Yazı rengi açık gri */
+  /* Arka plan resmi ve üzerine karartma katmanı */
+  background: linear-gradient(rgba(15, 15, 20, 0.85), rgba(15, 15, 20, 0.95)), 
+              url('https://images.unsplash.com/photo-1604696736612-c40f2168662c?q=80&w=1920&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Resim sabit kalsın, sayfa kayınca hareket etmesin */
+}
+
+/* --- BAŞLIKLAR VE VURGULAR --- */
+h1.display-4, h2, h3, h4.card-title {
+  color: #00d2ff !important; /* Neon Camgöbeği Mavisi */
+  text-shadow: 0 0 15px rgba(0, 210, 255, 0.4); /* Hafif neon parlaması */
+  font-weight: 700;
+}
+
+/* Ana başlık altındaki açıklama yazısı */
+.lead.text-muted {
+  color: #b0c4de !important; /* Daha açık bir mavi-gri */
+}
+
+/* --- KARTLAR (Glassmorphism - Buzlu Cam Efekti) --- */
+.card {
+  background-color: rgba(30, 34, 45, 0.75) !important; /* Yarı saydam koyu zemin */
+  backdrop-filter: blur(12px); /* Arkadaki resmi bulanıklaştır */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Çok ince parlak kenarlık */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Derinlik gölgesi */
+  color: #ffffff;
+}
+
+.card-header {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --- FORMLAR VE BUTONLAR --- */
+.form-label {
+  color: #cfd8dc; /* Etiket renkleri */
+}
+
+/* Açılır kutular (Select) ve Inputlar */
+.form-select, .form-control {
+  background-color: rgba(255, 255, 255, 0.1) !important; /* Hafif şeffaf */
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+/* Inputlara tıklayınca (focus) */
+.form-select:focus, .form-control:focus {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  border-color: #00d2ff !important; /* Neon mavi kenarlık */
+  box-shadow: 0 0 0 0.25rem rgba(0, 210, 255, 0.25);
+}
+
+/* Açılır kutunun içindeki seçenekler (mecburen koyu zemin) */
+.form-select option {
+  background-color: #1e222d;
+  color: white;
+}
+
+/* Ana Buton (Hesapla) */
+.btn-primary {
+  background-color: #00d2ff;
+  border-color: #00d2ff;
+  color: #000; /* Yazı siyah olsun ki okunsun */
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #00a8cc;
+  border-color: #00a8cc;
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.6); /* Hoverda parlasın */
+}
+
+/* --- DİĞER UFAK DÜZELTMELER --- */
+/* Trendler listesindeki beyaz arka planları düzelt */
+.list-group-item {
+  background-color: transparent !important;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* Alert kutuları (Başarı/Hata mesajları) */
+.alert-success {
+  background-color: rgba(25, 135, 84, 0.8); /* Şeffaf yeşil */
+  color: #fff;
+  border: none;
+}
+.alert-danger {
+  background-color: rgba(220, 53, 69, 0.8); /* Şeffaf kırmızı */
+  color: #fff;
+  border: none;
+}
+
+/* Navbar (Üst menü) arka planı */
+.navbar {
+  background-color: rgba(30, 34, 45, 0.95) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar-brand, .nav-link {
+  color: #e0e0e0 !important;
+}
+.nav-link:hover {
+  color: #00d2ff !important;
+}
+
+footer {
+  background-color: rgba(20, 20, 30, 0.95) !important; 
+  color: #b0c4de !important;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+footer a {
+  color: #00d2ff !important; 
+}
