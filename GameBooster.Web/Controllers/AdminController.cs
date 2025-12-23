@@ -1,5 +1,6 @@
 using GameBooster.Core.Entities;
 using GameBooster.Core.Interfaces;
+using GameBooster.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -108,5 +109,28 @@ namespace GameBooster.Web.Controllers
 
             return RedirectToAction("UserSystems", new { id = userId });
         }
+
+        public async Task<IActionResult> SystemReports()
+        {
+            var rapor = await _hardwareService.GetSystemReportsAsync();
+            return View(rapor);
+        }
+
+        public async Task<IActionResult> AdvancedAnalysis()
+{
+    var model = new AnalysisViewModel();
+
+    // 1. View'lerden verileri çek
+    model.UserStats = await _hardwareService.GetUserStatsAsync();
+    model.HighEndSystems = await _hardwareService.GetHighEndSystemsAsync();
+    model.GpuPerformance = await _hardwareService.GetGpuPerformanceAsync();
+    model.CpuCache = await _hardwareService.GetCpuCacheReportAsync();
+
+    // 2. SP'yi çalıştır (16 GB üstü sistemleri getir)
+    model.HighRamSystems = await _hardwareService.GetSystemsByMinRamAsync(16);
+
+    return View(model);
+}
+        
     }
 }

@@ -17,5 +17,13 @@ namespace GameBooster.Core.Interfaces
         Task<bool> DeleteUserSystemAsync(int systemId, int userId);
         Task<int> GetTotalHardwareCountAsync();
         Task DeleteSystemByAdminAsync(int systemId);
+        Task<List<SystemDetailModel>> GetSystemReportsAsync();
+        Task<string> GetGpuDescriptionAsync(int gpuId);
+        Task<List<UserStatsModel>> GetUserStatsAsync();
+        Task<List<HighEndSystemModel>> GetHighEndSystemsAsync();
+        Task<List<GpuPerformanceModel>> GetGpuPerformanceAsync();
+        Task<List<CpuCacheModel>> GetCpuCacheReportAsync();
+        Task<List<SystemDetailModel>> GetSystemsByMinRamAsync(int minRam);
+
     }
 }

@@ -5,6 +5,7 @@ using GameBooster.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SoapCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,12 +33,19 @@ builder.Services.AddIdentity<AppUser, IdentityRole<int>>(options =>
 .AddDefaultTokenProviders();
 
 // Servislerin Eklenmesi
+//SOAP servisimizi ekledik.
+builder.Services.AddHttpClient<GameBooster.Service.Services.ISoapService, GameBooster.Service.Services.SoapService>();
+
 builder.Services.AddScoped<IHardwareService, HardwareService>();
 
 builder.Services.AddSoapCore(); 
 builder.Services.AddScoped<ISystemRequirementService, SystemRequirementService>();
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddGrpcClient<GameBooster.Grpc.BottleneckCalculator.BottleneckCalculatorClient>(o =>
+{
+    o.Address = new Uri("http://localhost:5142");
+});
 
 var app = builder.Build();
 

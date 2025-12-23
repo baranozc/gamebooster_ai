@@ -1,0 +1,140 @@
+@model GameBooster.Web.Models.AnalysisViewModel
+@{
+    ViewData["Title"] = "Gelişmiş Analiz";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4 text-white">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-warning"><i class="fas fa-chart-line me-2"></i>Sistem Analiz Merkezi</h2>
+        <a asp-controller="Admin" asp-action="Index" class="btn btn-outline-light btn-sm">
+            <i class="fas fa-arrow-left me-1"></i> Panele Dön
+        </a>
+    </div>
+    
+    <ul class="nav nav-tabs border-secondary" id="analysisTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active bg-dark text-white border-secondary" id="tab1-tab" data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab">👥 Üye İstatistikleri</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link bg-dark text-white border-secondary" id="tab2-tab" data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab">🚀 High-End Sistemler</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link bg-dark text-white border-secondary" id="tab3-tab" data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab">⚙️ Donanım Skorları</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link bg-dark text-warning border-warning fw-bold" id="tab4-tab" data-bs-toggle="tab" data-bs-target="#tab4" type="button" role="tab">💾 Yüksek RAM (SP)</button>
+        </li>
+    </ul>
+
+    <div class="tab-content bg-dark border border-secondary border-top-0 p-4 shadow" id="analysisTabContent">
+        
+        <div class="tab-pane fade show active" id="tab1" role="tabpanel">
+            <h5 class="text-info mb-3">Kullanıcı İletişim Listesi (View: vw_UserStats)</h5>
+            @if (Model.UserStats != null && Model.UserStats.Any())
+            {
+                <table class="table table-dark table-sm table-striped table-hover">
+                    <thead><tr><th>Kullanıcı Adı</th><th>Email</th><th>Telefon</th></tr></thead>
+                    <tbody>
+                        @foreach(var item in Model.UserStats) { 
+                            <tr><td>@item.UserName</td><td>@item.Email</td><td>@(item.PhoneNumber ?? "-")</td></tr> 
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-secondary">Gösterilecek veri bulunamadı.</div>
+            }
+        </div>
+
+        <div class="tab-pane fade" id="tab2" role="tabpanel">
+            <h5 class="text-info mb-3">Üst Düzey Sistemler (View: vw_HighEndSystems)</h5>
+            @if (Model.HighEndSystems != null && Model.HighEndSystems.Any())
+            {
+                <table class="table table-dark table-sm table-striped table-hover">
+                    <thead><tr><th>Sistem Adı</th><th>GPU</th><th>CPU</th></tr></thead>
+                    <tbody>
+                        @foreach(var item in Model.HighEndSystems) { 
+                            <tr>
+                                <td class="text-warning fw-bold">@item.SystemName</td>
+                                <td>@item.GpuName</td>
+                                <td>@item.CpuName</td>
+                            </tr> 
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-secondary">Listelenecek High-End sistem yok.</div>
+            }
+        </div>
+
+        <div class="tab-pane fade" id="tab3" role="tabpanel">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="text-success border-bottom pb-2">Ekran Kartı Performansı (vw_GpuPerformance)</h6>
+                    @if (Model.GpuPerformance != null && Model.GpuPerformance.Any())
+                    {
+                        <table class="table table-dark table-sm table-hover">
+                            <thead><tr><th>Model</th><th>VRAM</th><th>Çekirdek</th></tr></thead>
+                            <tbody>
+                                 @foreach(var item in Model.GpuPerformance) { 
+                                     <tr><td>@item.Name</td><td>@item.Vram GB</td><td>@item.CoreCount</td></tr> 
+                                 }
+                            </tbody>
+                        </table>
+                    }
+                    else { <div class="text-muted small">Veri yok.</div> }
+                </div>
+                
+                <div class="col-md-6">
+                    <h6 class="text-primary border-bottom pb-2">İşlemci Önbellek Raporu (vw_CpuCacheReport)</h6>
+                    @if (Model.CpuCache != null && Model.CpuCache.Any())
+                    {
+                        <table class="table table-dark table-sm table-hover">
+                            <thead><tr><th>Model</th><th>Thread</th><th>Cache</th></tr></thead>
+                            <tbody>
+                                 @foreach(var item in Model.CpuCache) { 
+                                     <tr><td>@item.Name</td><td>@item.ThreadCount</td><td>@item.Cache MB</td></tr> 
+                                 }
+                            </tbody>
+                        </table>
+                    }
+                    else { <div class="text-muted small">Veri yok.</div> }
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab4" role="tabpanel">
+            <div class="alert alert-warning text-dark d-flex align-items-center mb-3">
+                <i class="fas fa-database fa-2x me-3"></i>
+                <div>
+                    <strong>Stored Procedure Çalıştı:</strong> <code>CALL sp_GetSystemsByMinRam(16)</code><br>
+                    <small>Bu liste veritabanı seviyesinde filtrelenerek sadece <strong>16GB ve üzeri</strong> RAM'e sahip sistemleri getirmiştir.</small>
+                </div>
+            </div>
+
+            @if (Model.HighRamSystems != null && Model.HighRamSystems.Any())
+            {
+                <table class="table table-dark table-striped table-hover">
+                    <thead><tr><th>Sistem Sahibi</th><th>Sistem Adı</th><th>RAM Miktarı</th></tr></thead>
+                    <tbody>
+                        @foreach(var item in Model.HighRamSystems) { 
+                            <tr>
+                                <td>@item.UserName</td>
+                                <td>@item.SystemName</td>
+                                <td><span class="badge bg-success fs-6">@item.RamAmount GB</span></td>
+                            </tr> 
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-secondary">Kriterlere uyan (16GB+) sistem bulunamadı.</div>
+            }
+        </div>
+    </div>
+</div>

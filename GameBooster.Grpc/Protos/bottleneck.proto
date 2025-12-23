@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option csharp_namespace = "GameBooster.Grpc";
+
+package bottleneck;
+
+// Servis Adı: Darboğaz Hesaplayıcı
+service BottleneckCalculator {
+  // Metot: Hesapla
+  rpc Calculate (BottleneckRequest) returns (BottleneckReply);
+}
+
+message BottleneckRequest {
+  string gpuModel = 1;
+  string cpuModel = 2;
+}
+
+message BottleneckReply {
+  double percentage = 1; // Darboğaz yüzdesi (Örn: 15.5)
+  string status = 2;     // Durum mesajı (Örn: "İşlemci Zayıf")
+  bool isCompatible = 3; // Uyumlu mu?
+}

@@ -14,18 +14,17 @@ namespace GameBooster.Data.Migrations
     // ==========================================
 
     // 1. Kısıt: RAM kontrolü
-    migrationBuilder.Sql("ALTER TABLE Games ADD CONSTRAINT CK_Games_MinRam CHECK (MinRam > 0);");
+migrationBuilder.Sql("ALTER TABLE Games ADD CONSTRAINT CK_Games_MinRam CHECK (MinRam > 0);");
 
-    // ⚠️ ÇÖZÜM BURADA: Önce hatalı verileri (100'den büyükleri) 100'e çekiyoruz!
-    // Böylece kural eklendiğinde hata vermeyecek.
-    migrationBuilder.Sql("UPDATE Games SET DemandScore = 100 WHERE DemandScore > 100;");
-    migrationBuilder.Sql("UPDATE Games SET DemandScore = 0 WHERE DemandScore < 0;");
+// ✅ DÜZELTME: Sadece negatifleri temizliyoruz. 
+// 100'den büyük olanlara (120, 500 vs.) DOKUNMUYORUZ.
+migrationBuilder.Sql("UPDATE Games SET DemandScore = 0 WHERE DemandScore < 0;");
 
-// BUNUNLA DEĞİŞTİR:
+// Kısıtlama: Sadece "0'dan büyük veya eşit olsun" diyoruz. Üst sınır yok.
 migrationBuilder.Sql("ALTER TABLE Games ADD CONSTRAINT CK_Games_DemandScore CHECK (DemandScore >= 0);");
 
-    // 3. Kısıt: GPU Vram kontrolü
-    migrationBuilder.Sql("ALTER TABLE GPUs ADD CONSTRAINT CK_GPUs_Vram CHECK (Vram > 0);");
+// 3. Kısıt: GPU Vram kontrolü
+migrationBuilder.Sql("ALTER TABLE GPUs ADD CONSTRAINT CK_GPUs_Vram CHECK (Vram > 0);");
 
 
 // ==========================================

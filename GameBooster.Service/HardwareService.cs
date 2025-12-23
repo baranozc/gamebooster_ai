@@ -170,9 +170,52 @@ namespace GameBooster.Service
             return await _context.GPUs.FindAsync(id);
         }
 
+
+public async Task<string> GetGpuDescriptionAsync(int gpuId)
+{
+    string description = "Standart";
+
+    try
+    {
+        // Service katmanında Context var, bağlantıyı oradan alıyoruz
+        var connection = _context.Database.GetDbConnection();
+        
+        // Bağlantı kapalıysa aç
+        if (connection.State != System.Data.ConnectionState.Open)
+            await connection.OpenAsync();
+
+        using (var command = connection.CreateCommand())
+        {
+            // SQL Fonksiyonunu çağırıyoruz
+            command.CommandText = $"SELECT fn_GetGpuDescription({gpuId})";
+            
+            // Tek bir değer (string) döneceği için ExecuteScalar kullanıyoruz
+            var result = await command.ExecuteScalarAsync();
+
+            if (result != null)
+            {
+                description = result.ToString();
+            }
+        }
+    }
+    catch (Exception)
+    {
+        // Hata olursa varsayılan dön
+        return "Bilinmiyor";
+    }
+
+    return description;
+}
+
         public async Task<List<GPU>> GetGPUsAsync()
         {
             return await _context.GPUs.OrderBy(c => c.Name).ToListAsync();
+        }
+
+        public async Task<List<SystemDetailModel>> GetSystemReportsAsync()
+        {
+            // Context zaten burada inject edilmiş durumda, direkt kullanıyoruz.
+            return await _context.SystemDetails.ToListAsync();
         }
 
         public async Task<int> GetTotalHardwareCountAsync()
@@ -208,6 +251,35 @@ namespace GameBooster.Service
             _context.UserSystems.Add(newSystem);
             await _context.SaveChangesAsync();
         }
+        public async Task<List<UserStatsModel>> GetUserStatsAsync()
+{
+    return await _context.ViewUserStats.ToListAsync();
+}
 
+public async Task<List<HighEndSystemModel>> GetHighEndSystemsAsync()
+{
+    return await _context.ViewHighEndSystems.ToListAsync();
+}
+
+public async Task<List<GpuPerformanceModel>> GetGpuPerformanceAsync()
+{
+    return await _context.ViewGpuPerformance.ToListAsync();
+}
+
+public async Task<List<CpuCacheModel>> GetCpuCacheReportAsync()
+{
+    return await _context.ViewCpuCache.ToListAsync();
+}
+
+// SP KULLANIMI: RAM Filtreleme
+public async Task<List<SystemDetailModel>> GetSystemsByMinRamAsync(int minRam)
+{
+    // Veritabanındaki sp_GetSystemsByMinRam prosedürünü çağırır
+    return await _context.SystemDetails
+        .FromSqlRaw("CALL sp_GetSystemsByMinRam({0})", minRam)
+        .ToListAsync();
+}
+
+        
     }
 }

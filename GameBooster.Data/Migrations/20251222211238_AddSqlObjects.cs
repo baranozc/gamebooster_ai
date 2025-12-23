@@ -4,10 +4,8 @@
 
 namespace GameBooster.Data.Migrations
 {
-    /// <inheritdoc />
     public partial class AddSqlObjects : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
 {
     // VIEWS

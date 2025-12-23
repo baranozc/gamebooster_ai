@@ -19,6 +19,11 @@ namespace GameBooster.Data
         public DbSet<GPU> GPUs { get; set; }
         public DbSet<CPU> CPUs { get; set; }
         public DbSet<PredictionLog> PredictionLogs { get; set; }
+        public DbSet<SystemDetailModel> SystemDetails {get; set;}
+        public DbSet<UserStatsModel> ViewUserStats { get; set; }
+        public DbSet<HighEndSystemModel> ViewHighEndSystems { get; set; }
+        public DbSet<GpuPerformanceModel> ViewGpuPerformance { get; set; }
+        public DbSet<CpuCacheModel> ViewCpuCache { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,6 +31,15 @@ namespace GameBooster.Data
             //Ekran kartı ve İşlemci isimleri tek bir tane olmalı
             modelBuilder.Entity<GPU>().HasIndex(g => g.Name).IsUnique();
             modelBuilder.Entity<CPU>().HasIndex(c => c.Name).IsUnique();
+
+            modelBuilder.Entity<SystemDetailModel>()
+            .HasNoKey()
+            .ToView("vw_SystemDetails");
+            
+            modelBuilder.Entity<UserStatsModel>().HasNoKey().ToView("vw_UserStats");
+            modelBuilder.Entity<HighEndSystemModel>().HasNoKey().ToView("vw_HighEndSystems");
+            modelBuilder.Entity<GpuPerformanceModel>().HasNoKey().ToView("vw_GpuPerformance");
+            modelBuilder.Entity<CpuCacheModel>().HasNoKey().ToView("vw_CpuCacheReport");
 
             base.OnModelCreating(modelBuilder);
         }

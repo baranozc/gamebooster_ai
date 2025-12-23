@@ -23,10 +23,11 @@
     }
     else
     {
-        <div class="card shadow">
+        <div class="card shadow border-secondary">
             <div class="card-body p-0">
-                <table class="table table-hover table-striped mb-0">
-                    <thead class="bg-light">
+                
+                <table class="table table-dark table-hover table-striped mb-0">
+                    <thead>
                         <tr>
                             <th>Sistem Adı</th>
                             <th>Ekran Kartı</th>
@@ -40,7 +41,7 @@
                         @foreach (var sys in Model)
                         {
                             <tr>
-                                <td class="fw-bold text-primary">@sys.SystemName</td>
+                                <td class="fw-bold text-info">@sys.SystemName</td>
                                 <td>@sys.GPU.Name</td>
                                 <td>@sys.CPU.Name</td>
                                 <td>@sys.RamAmount GB</td>
@@ -48,7 +49,9 @@
                                 <td class="text-end">
                                     <form asp-action="DeleteSystem" method="post" class="d-inline">
                                         <input type="hidden" name="systemId" value="@sys.Id" />
-                                        <input type="hidden" name="userId" value="@sys.AppUserId" /> <button type="submit" class="btn btn-sm btn-outline-danger" 
+                                        <input type="hidden" name="userId" value="@sys.AppUserId" /> 
+                                        
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" 
                                                 onclick="return confirm('Bu sistemi (Admin yetkisiyle) silmek istediğinize emin misiniz?');">
                                             🗑️ Sil
                                         </button>

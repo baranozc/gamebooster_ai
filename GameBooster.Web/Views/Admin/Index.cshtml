@@ -3,36 +3,59 @@
 }
 
 <div class="container mt-5">
-    <div class="p-5 mb-4 bg-dark text-white rounded-3 shadow">
-        <div class="container-fluid py-5">
+    <div class="p-5 mb-5 bg-dark text-white rounded-3 shadow border border-secondary">
+        <div class="container-fluid py-2">
             <h1 class="display-5 fw-bold">👑 Yönetici Paneli</h1>
-            <p class="col-md-8 fs-4">Sistem istatistiklerini görüntüleyebilir ve üyeleri yönetebilirsin.</p>
+            <p class="col-md-8 fs-4">Platform genelindeki istatistikleri takip edebilir ve kullanıcı yönetimini sağlayabilirsiniz.</p>
             
-            <a asp-action="UserList" class="btn btn-primary btn-lg fw-bold shadow">
-                👥 Kullanıcı Ayarları / Listesi
+            <a asp-action="UserList" class="btn btn-primary btn-lg fw-bold shadow mt-3">
+                <i class="fas fa-users-cog me-2"></i>Kullanıcı Yönetimi
             </a>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-6">
-            <div class="card border-warning mb-3 shadow-sm h-100">
-                <div class="card-header bg-warning text-dark fw-bold fs-5">👥 Toplam Üye</div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card border-warning shadow-sm h-100">
+                <div class="card-header bg-warning text-dark fw-bold fs-5">
+                    <i class="fas fa-users me-2"></i>Kayıtlı Üyeler
+                </div>
                 <div class="card-body">
                     <h2 class="card-title display-4 fw-bold">@ViewBag.UserCount</h2>
-                    <p class="card-text text-muted">Sisteme kayıtlı toplam kullanıcı.</p>
+                    <p class="card-text text-muted">Platformu aktif kullanan toplam kişi sayısı.</p>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6">
-            <div class="card border-info mb-3 shadow-sm h-100">
-                <div class="card-header bg-info text-white fw-bold fs-5">🎮 Donanım Havuzu</div>
+        <div class="col-md-4 mb-4">
+            <div class="card border-info shadow-sm h-100">
+                <div class="card-header bg-info text-white fw-bold fs-5">
+                    <i class="fas fa-microchip me-2"></i>Donanım Veritabanı
+                </div>
                 <div class="card-body">
                     <h2 class="card-title display-4 fw-bold">@ViewBag.HardwareCount</h2>
-                    <p class="card-text text-muted">Veritabanındaki toplam GPU + CPU sayısı.</p>
+                    <p class="card-text text-muted">Sistemde tanımlı GPU ve CPU modelleri.</p>
                 </div>
             </div>
         </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card border-success shadow-sm h-100">
+                <div class="card-header bg-success text-white fw-bold fs-5">
+                    <i class="fas fa-server me-2"></i>Sistem Envanteri
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h3 class="card-title fw-bold">Detaylı Liste</h3>
+                    <p class="card-text text-muted">
+                        Kullanıcıların sahip olduğu sistemlerin teknik detayları ve dağılım listesi.
+                    </p>
+                   <a asp-action="AdvancedAnalysis" class="btn btn-outline-success fw-bold mt-auto stretched-link"></a>
+    <i class="fas fa-search me-2"></i>Listeyi İncele
+</a>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>

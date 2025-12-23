@@ -11,21 +11,23 @@
     
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="alert alert-success mt-4 bg-success text-white border-0 shadow-sm">
+        <div class="alert alert-success alert-dismissible fade show mt-4 border-0 shadow-sm" role="alert" style="background-color: #198754; color: white;">
             @TempData["SuccessMessage"]
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
 
     @if (TempData["ErrorMessage"] != null)
     {
-        <div class="alert alert-danger mt-4 bg-danger text-white border-0 shadow-sm">
+        <div class="alert alert-danger alert-dismissible fade show mt-4 border-0 shadow-sm" role="alert" style="background-color: #dc3545; color: white;">
             ⚠️ @TempData["ErrorMessage"]
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
 
-    <div class="card shadow-sm border-0 mb-5 bg-dark text-white" style="border: 1px solid #28a745 !important;">
+    <div class="card shadow-lg border-0 mb-5 bg-dark text-white" style="border: 1px solid #198754 !important;">
         <div class="card-header bg-success text-white">
-            <h5 class="m-0 py-1">➕ Yeni Sistem Oluştur</h5>
+            <h5 class="m-0 py-1"><i class="fas fa-plus-circle me-2"></i>Yeni Sistem Oluştur</h5>
         </div>
         <div class="card-body">
             <form asp-action="AddSystem" method="post" class="row g-3 align-items-end">
@@ -74,13 +76,45 @@
         </div>
     </div>
 
+    <hr class="my-5 border-secondary">
+    
+    <h2 class="mb-4 d-flex align-items-center" style="color: #00d2ff; text-shadow: 0 0 10px rgba(0, 210, 255, 0.3);">
+        <i class="fas fa-desktop me-3"></i> Kayıtlı Sistemlerim
+        
+       <span class="badge bg-dark border border-secondary text-white-50 fs-6 ms-3 shadow-sm" 
+              style="text-shadow: none; font-size: 0.85rem !important;" 
+              title="Bu veri veritabanından Stored Procedure (SP) ile çekilmektedir.">
+            <i class="fas fa-chart-pie me-2 text-warning"></i>Toplam Kayıt: <span class="text-white fw-bold">@ViewBag.SpSystemCount</span>
+        </span>
+    </h2>
+
+    @if (ViewBag.SoapMessage != null)
+    {
+        <div class="card mb-4 border-0 shadow-sm" 
+             style="background: linear-gradient(90deg, rgba(13,110,253,0.15) 0%, rgba(13,110,253,0.02) 100%); border-left: 4px solid #0d6efd !important;">
+            <div class="card-body py-3 d-flex align-items-center">
+                <div class="me-3 text-primary">
+                    <i class="fas fa-globe-americas fa-2x"></i>
+                </div>
+                
+                <div>
+                    <h6 class="fw-bold mb-0 text-white" style="font-size: 0.9rem; letter-spacing: 0.5px; text-transform: uppercase;">
+                        Global Donanım Doğrulama (SOAP)
+                    </h6>
+                    <small class="text-white-50">
+                        @ViewBag.SoapMessage
+                    </small>
+                </div>
+
+                <div class="ms-auto text-success">
+                    <i class="fas fa-check-circle fa-lg"></i>
+                </div>
+            </div>
+        </div>
+    }
+
     @if (Model != null && Model.Count > 0)
     {
-        <hr class="my-5 border-secondary">
-        <h2 class="mb-4 d-flex align-items-center">
-            <span class="me-2">👤</span> Kayıtlı Sistemlerim
-        </h2>
-
         <div class="row">
             @foreach (var sys in Model)
             {
@@ -102,7 +136,7 @@
                                 <input type="hidden" name="id" value="@sys.Id" />
                                 <button type="submit" class="btn btn-sm btn-outline-danger px-3"
                                     onclick="return confirm('Bu sistemi silmek istediğinize emin misiniz?');">
-                                    🗑️ Sil
+                                    <i class="fas fa-trash-alt me-1"></i> Sil
                                 </button>
                             </form>
                         </div>
@@ -113,22 +147,29 @@
     }
     else
     {
-        <div class="alert alert-info bg-dark text-info border-info text-center mt-4">
+        <div class="alert alert-info bg-dark text-info border-info text-center mt-4 p-4">
+            <i class="fas fa-info-circle fa-2x mb-3"></i><br>
             Henüz kayıtlı bir sisteminiz yok. Yukarıdaki formdan ekleyebilirsiniz.
         </div>
     }
 </div>
 
 <style>
-    /* Input odaklandığında parlamayı düzeltir */
+    /* Input ve Select odaklandığında parlamayı düzeltir */
     .form-control:focus, .form-select:focus {
         background-color: #495057 !important;
         color: white !important;
         box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+        border-color: #28a745;
     }
-    /* Option renklerini düzeltir */
+    /* Option renklerini düzeltir (Dropdown açılınca) */
     option {
         background: #343a40;
         color: white;
+    }
+    /* Placeholder rengini açar */
+    ::placeholder {
+        color: #adb5bd !important;
+        opacity: 0.5;
     }
 </style>
